@@ -9,6 +9,8 @@ interface IPlayerState {
   name: string;
   color: string;
   currentPosition: string;
+  xCoordinate?: number;
+  yCoordinate?: number;
 }
 
 const App = () => {
@@ -29,7 +31,7 @@ const App = () => {
       setOrderForPlayers(newArr);
     }
   }, [numberOfPlayers]);
-  console.log("PLAYERS: ", players);
+
   return (
     <React.StrictMode>
       <EscapeContext.Provider

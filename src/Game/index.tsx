@@ -10,7 +10,7 @@ const Game: FunctionComponent<RouteComponentProps> = () => {
   const currentPlayer = players[orderForPlayers[0]];
   return players.length > 0 ? (
     <GameContext.Provider value={{ currentPlayer }}>
-      <div className="game">
+      <div id="game" className="game">
         <div id="player-turn">
           <div style={{ color: `${currentPlayer.color}` }}>
             {currentPlayer.name}
@@ -20,6 +20,7 @@ const Game: FunctionComponent<RouteComponentProps> = () => {
               ? "Select Starting Position"
               : "Move"}
           </div>
+          <hr />
         </div>
         <Board />
       </div>
