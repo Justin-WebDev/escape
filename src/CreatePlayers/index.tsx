@@ -1,6 +1,6 @@
 import { navigate, Redirect, RouteComponentProps } from "@reach/router";
 import React, { FunctionComponent, useContext } from "react";
-import Player from "./player";
+import Player from "./Player";
 import "./_createPlayer.scss";
 import { EscapeContext } from "../context";
 
