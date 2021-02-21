@@ -9,8 +9,6 @@ interface IPlayerState {
   name: string;
   color: string;
   currentPosition: string;
-  xCoordinate?: number;
-  yCoordinate?: number;
 }
 
 const App = () => {
