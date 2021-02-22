@@ -4,6 +4,7 @@ import { EscapeContext } from "./context";
 import Main from "./Main";
 import CreatePlayers from "./CreatePlayers";
 import Game from "./Game";
+import LocalPlay from "./LocalPlay";
 
 interface IPlayerState {
   name: string;
@@ -44,11 +45,21 @@ const App = () => {
           setOrderForPlayers,
         }}
       >
-        <Router>
-          <Main path="/" />
-          <CreatePlayers path="/players" />
-          <Game path="/game" />
-        </Router>
+        <div
+          style={{
+            // height: "100vh",
+            display: "grid",
+            gridTemplateRows: "10vh 90vh",
+          }}
+        >
+          <h1 style={{ gridRow: "1" }}>ESCAPE</h1>
+          <Router>
+            <Main path="/" />
+            <LocalPlay path="/local" />
+            <CreatePlayers path="/local/players" />
+            <Game path="/game" />
+          </Router>
+        </div>
       </EscapeContext.Provider>
     </React.StrictMode>
   );

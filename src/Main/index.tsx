@@ -1,5 +1,5 @@
 import { Link, RouteComponentProps } from "@reach/router";
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import NumberOfPlayers from "./NumberOfPlayers";
 import SizeOfBoard from "./SizeOfBoard";
 import "./_main.scss";
@@ -7,11 +7,11 @@ import "./_main.scss";
 const Main: FunctionComponent<RouteComponentProps> = () => {
   return (
     <div className="main">
-      <h1>ESCAPE</h1>
-      <NumberOfPlayers />
-      <SizeOfBoard />
-      <Link to="/players" style={{ textDecoration: "none" }}>
-        <div className="continue-button">Continue</div>
+      <Link to="/online" style={{ textDecoration: "none" }}>
+        <button>Online Play</button>
+      </Link>
+      <Link to="/local" style={{ textDecoration: "none" }}>
+        <button>Local Play</button>
       </Link>
     </div>
   );
