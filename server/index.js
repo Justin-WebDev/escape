@@ -43,12 +43,14 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const username = allUsers[id];
     delete allUsers[id];
-    socket.broadcast.emit("player disconnect", {
-      roomName: "roomName",
-      userName: "Jailer",
-      message: `${username} left the game!`,
-      playerThatLeft: username,
-    });
+    if (username) {
+      socket.broadcast.emit("player disconnect", {
+        roomName: "roomName",
+        userName: "Jailer",
+        message: `${username} left the game!`,
+        playerThatLeft: username,
+      });
+    }
   });
 });
 

@@ -4,7 +4,7 @@ import OnlinePlayers from "../OnlinePlayers";
 import "./_chatRoom.scss";
 
 const ChatRoom = () => {
-  const { socket, playerName, messages } = useContext(OnlinePlayContext);
+  const { socket, playerName, messages, color } = useContext(OnlinePlayContext);
 
   return (
     <div className="chatRoomContainer">
@@ -21,11 +21,17 @@ const ChatRoom = () => {
               userName: string;
               message: string;
             }) => {
-              return <div>{`${userName}: ${message}`}</div>;
+              return userName === playerName ? (
+                <div style={{ color }}>{`${userName}: ${message}`}</div>
+              ) : userName === "Jailer" ? (
+                <div style={{ color: "red" }}>{`${userName}: ${message}`}</div>
+              ) : (
+                <div>{`${userName}: ${message}`}</div>
+              );
             }
           )}
         </div>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", margin: "0 10px 10px 10px" }}>
           <input
             type="text"
             id="messageInput"

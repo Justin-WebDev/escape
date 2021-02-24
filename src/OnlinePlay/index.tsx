@@ -12,6 +12,8 @@ import "./_onlinePlay.scss";
 //   setRooms(Object.assign({}, rooms, msg));
 // });
 
+const color = "blue";
+
 const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
   const [playerName, setPlayerName] = useState<string | null>(null);
   const [rooms, setRooms] = useState<any>({});
@@ -108,6 +110,7 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
         socket,
         messages,
         onlinePlayers,
+        color,
       }}
     >
       {playerName ? (
