@@ -1,7 +1,5 @@
 import { Link, RouteComponentProps } from "@reach/router";
-import React, { FunctionComponent, useState } from "react";
-import NumberOfPlayers from "./NumberOfPlayers";
-import SizeOfBoard from "./SizeOfBoard";
+import React, { FunctionComponent } from "react";
 import "./_main.scss";
 
 const Main: FunctionComponent<RouteComponentProps> = () => {

@@ -5,6 +5,7 @@ import Main from "./Main";
 import CreatePlayers from "./CreatePlayers";
 import Game from "./Game";
 import LocalPlay from "./LocalPlay";
+import OnlinePlay from "./OnlinePlay";
 
 interface IPlayerState {
   name: string;
@@ -52,11 +53,23 @@ const App = () => {
             gridTemplateRows: "10vh 90vh",
           }}
         >
-          <h1 style={{ gridRow: "1" }}>ESCAPE</h1>
+          <div
+            style={{
+              height: "100%",
+              gridRow: "1",
+              display: "flex",
+              placeContent: "center",
+              fontSize: "5em",
+              fontWeight: "bold",
+            }}
+          >
+            ESCAPE
+          </div>
           <Router>
             <Main path="/" />
             <LocalPlay path="/local" />
             <CreatePlayers path="/local/players" />
+            <OnlinePlay path="/online" />
             <Game path="/game" />
           </Router>
         </div>

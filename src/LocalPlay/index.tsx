@@ -1,7 +1,7 @@
 import { Link, RouteComponentProps } from "@reach/router";
 import React, { FunctionComponent } from "react";
-import NumberOfPlayers from "../Main/NumberOfPlayers";
-import SizeOfBoard from "../Main/SizeOfBoard";
+import NumberOfPlayers from "./NumberOfPlayers";
+import SizeOfBoard from "./SizeOfBoard";
 import "./_localPlay.scss";
 
 const LocalPlay: FunctionComponent<RouteComponentProps> = () => {
