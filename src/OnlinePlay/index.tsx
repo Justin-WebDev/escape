@@ -18,87 +18,41 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
   const [playerName, setPlayerName] = useState<string | null>(null);
   const [rooms, setRooms] = useState<any>({});
   const [messages, setMessages] = useState<
-    { roomName: string; userName: string; message: string }[]
+    { username: string; message: string }[]
   >([]);
   const [onlinePlayers, setOnlinePlayers] = useState<{
     [key: string]: boolean;
   }>({});
 
+  socket.on("roomUsers", (allUsers: { [key: string]: boolean }) => {
+    setOnlinePlayers(allUsers);
+  });
+
   socket.on(
-    "login",
-    ({
-      roomName,
-      userName,
-      message,
-      playerName,
-      allUsers,
-    }: {
-      roomName: string;
-      userName: string;
-      message: string;
-      playerName: string;
-      allUsers: string[];
-    }) => {
-      const users = allUsers.reduce((total, current) => {
-        return { ...total, [current]: true };
-      }, {});
-      setOnlinePlayers(users);
-      setPlayerName(playerName);
-      setMessages([...messages, { roomName, userName, message }]);
+    "message",
+    ({ username, message }: { username: string; message: string }) => {
+      setMessages([...messages, { username, message }]);
     }
   );
 
-  socket.on(
-    "new user",
-    ({
-      roomName,
-      userName,
-      message,
-      addedUser,
-    }: {
-      roomName: string;
-      userName: string;
-      message: string;
-      addedUser: string;
-    }) => {
-      setOnlinePlayers({ ...onlinePlayers, [addedUser]: true });
-      setMessages([...messages, { roomName, userName, message }]);
-    }
-  );
-
-  socket.on(
-    "receive message",
-    ({
-      roomName,
-      userName,
-      message,
-    }: {
-      roomName: string;
-      userName: string;
-      message: string;
-    }) => {
-      setMessages([...messages, { roomName, userName, message }]);
-    }
-  );
-
-  socket.on(
-    "player disconnect",
-    ({
-      roomName,
-      userName,
-      message,
-      playerThatLeft,
-    }: {
-      roomName: string;
-      userName: string;
-      message: string;
-      playerThatLeft: string;
-    }) => {
-      delete onlinePlayers[playerThatLeft];
-      setOnlinePlayers(onlinePlayers);
-      setMessages([...messages, { roomName, userName, message }]);
-    }
-  );
+  // socket.on(
+  //   "player disconnect",
+  //   ({
+  //     roomName,
+  //     userName,
+  //     message,
+  //     playerThatLeft,
+  //   }: {
+  //     roomName: string;
+  //     userName: string;
+  //     message: string;
+  //     playerThatLeft: string;
+  //   }) => {
+  //     delete onlinePlayers[playerThatLeft];
+  //     setOnlinePlayers(onlinePlayers);
+  //     setMessages([...messages, { roomName, userName, message }]);
+  //   }
+  // );
 
   return (
     <OnlinePlayContext.Provider

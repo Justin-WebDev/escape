@@ -27,8 +27,13 @@ const Login: FunctionComponent = () => {
                 "createPlayerName"
               ) as HTMLFormElement).value;
 
-              socket.emit("login", playerName);
+              setPlayerName(playerName);
               setShowModal(!showModal);
+
+              socket.emit("joinRoom", {
+                username: playerName,
+                roomName: "lobby",
+              });
             }}
           >
             Submit

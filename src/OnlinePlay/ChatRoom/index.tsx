@@ -12,21 +12,13 @@ const ChatRoom = () => {
       <div className="chatContainer">
         <div className="chat">
           {messages.map(
-            ({
-              roomName,
-              userName,
-              message,
-            }: {
-              roomName: string;
-              userName: string;
-              message: string;
-            }) => {
-              return userName === playerName ? (
-                <div style={{ color }}>{`${userName}: ${message}`}</div>
-              ) : userName === "Jailer" ? (
-                <div style={{ color: "red" }}>{`${userName}: ${message}`}</div>
+            ({ username, message }: { username: string; message: string }) => {
+              return username === playerName ? (
+                <div style={{ color }}>{`${username}: ${message}`}</div>
+              ) : username === "Jailer" ? (
+                <div style={{ color: "red" }}>{`${username}: ${message}`}</div>
               ) : (
-                <div>{`${userName}: ${message}`}</div>
+                <div>{`${username}: ${message}`}</div>
               );
             }
           )}
@@ -43,11 +35,7 @@ const ChatRoom = () => {
               const message = document.getElementById(
                 "messageInput"
               ) as HTMLFormElement;
-              socket.emit("send message", {
-                roomName: "roomName",
-                userName: playerName,
-                message: message.value,
-              });
+              socket.emit("message", message.value);
               message.value = "";
             }}
           >
