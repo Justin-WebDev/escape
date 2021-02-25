@@ -35,25 +35,6 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
     }
   );
 
-  // socket.on(
-  //   "player disconnect",
-  //   ({
-  //     roomName,
-  //     userName,
-  //     message,
-  //     playerThatLeft,
-  //   }: {
-  //     roomName: string;
-  //     userName: string;
-  //     message: string;
-  //     playerThatLeft: string;
-  //   }) => {
-  //     delete onlinePlayers[playerThatLeft];
-  //     setOnlinePlayers(onlinePlayers);
-  //     setMessages([...messages, { roomName, userName, message }]);
-  //   }
-  // );
-
   return (
     <OnlinePlayContext.Provider
       value={{
