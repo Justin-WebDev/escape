@@ -1,10 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
+import { EscapeContext } from "../../context";
 import { OnlinePlayContext } from "../OnlinePlayContext";
-import OnlinePlayers from "../OnlinePlayers";
+import OnlinePlayers from "./OnlinePlayers";
 import "./_chatRoom.scss";
 
 const ChatRoom = () => {
-  const { socket, playerName, messages, color } = useContext(OnlinePlayContext);
+  const { messages, color } = useContext(OnlinePlayContext);
+  const { socket, playerName } = useContext(EscapeContext);
 
   return (
     <div className="chatRoomContainer">

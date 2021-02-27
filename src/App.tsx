@@ -6,6 +6,8 @@ import CreatePlayers from "./CreatePlayers";
 import Game from "./Game";
 import LocalPlay from "./LocalPlay";
 import OnlinePlay from "./OnlinePlay";
+import Login from "./OnlinePlay/Login";
+import { socket } from "./webSocket";
 
 interface IPlayerState {
   name: string;
@@ -18,6 +20,7 @@ const App = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState(0);
   const [players, setPlayers] = useState<IPlayerState[]>([]);
   const [orderForPlayers, setOrderForPlayers] = useState<number[]>([]);
+  const [playerName, setPlayerName] = useState<string | null>(null);
 
   useEffect(() => {
     if (numberOfPlayers > 0) {
@@ -44,6 +47,9 @@ const App = () => {
           setPlayers,
           orderForPlayers,
           setOrderForPlayers,
+          socket,
+          playerName,
+          setPlayerName,
         }}
       >
         <div
@@ -67,10 +73,11 @@ const App = () => {
           </div>
           <Router>
             <Main path="/" />
-            <LocalPlay path="/local" />
-            <CreatePlayers path="/local/players" />
-            <OnlinePlay path="/online" />
-            <Game path="/game" />
+            <Login path="login" />
+            <OnlinePlay path="online/*" />
+            {/* <LocalPlay path="local" />
+            <CreatePlayers path="local/players" />
+            <Game path="game" /> */}
           </Router>
         </div>
       </EscapeContext.Provider>

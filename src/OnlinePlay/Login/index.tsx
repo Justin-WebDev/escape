@@ -1,14 +1,15 @@
+import { navigate, RouteComponentProps } from "@reach/router";
 import React, { FunctionComponent, useContext, useState } from "react";
+import { EscapeContext } from "../../context";
 import Modal from "../../Modal";
-import { OnlinePlayContext } from "../OnlinePlayContext";
 
 /**
  * GOING TO MAKE JUST A TEXT INPUT FOR NOW
  *
  * REPLACE WITH LOGIN / SIGN UP AND MAYBE CONTINUE AS GUEST
  */
-const Login: FunctionComponent = () => {
-  const { setPlayerName, socket } = useContext(OnlinePlayContext);
+const Login: FunctionComponent<RouteComponentProps> = () => {
+  const { socket, setPlayerName } = useContext(EscapeContext);
   const [showModal, setShowModal] = useState(true);
 
   return (
@@ -34,6 +35,7 @@ const Login: FunctionComponent = () => {
                 username: playerName,
                 roomName: "lobby",
               });
+              navigate("../online");
             }}
           >
             Submit

@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { OnlinePlayContext } from "../OnlinePlayContext";
+import { EscapeContext } from "../../../context";
+import { OnlinePlayContext } from "../../OnlinePlayContext";
 
 const OnlinePlayers = () => {
-  const { playerName, onlinePlayers, color } = useContext(OnlinePlayContext);
+  const { onlinePlayers, color } = useContext(OnlinePlayContext);
+  const { playerName } = useContext(EscapeContext);
 
   return (
     <div

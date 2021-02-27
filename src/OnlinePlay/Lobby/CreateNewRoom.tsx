@@ -1,13 +1,14 @@
+import { navigate } from "@reach/router";
 import React, { FunctionComponent, useContext, useState } from "react";
-import Modal from "../Modal";
+import { EscapeContext } from "../../context";
+import Modal from "../../Modal";
 // import useRoom from "./Room";
-import { OnlinePlayContext } from "./OnlinePlayContext";
 
 const CreateNewRoom: FunctionComponent = () => {
   const [showModal, setShowModal] = useState(false);
-  const { rooms, setRooms, playerName, socket } = useContext(OnlinePlayContext);
+  const { socket } = useContext(EscapeContext);
   return (
-    <div style={{ gridRow: "1" }}>
+    <>
       <button
         className="createRoomButton"
         onClick={() => setShowModal(!showModal)}
@@ -37,20 +38,22 @@ const CreateNewRoom: FunctionComponent = () => {
             <br />
             <button
               onClick={() => {
-                const roomName = (document.querySelector(
-                  "#roomName"
+                const newRoomName = (document.getElementById(
+                  "roomName"
                 ) as HTMLInputElement)!.value;
 
-                socket.emit("create room", {
-                  [roomName]: {
-                    roomName,
-                    players: [playerName],
-                    neededAmountOfPlayers: 4,
-                    status: false,
-                  },
+                const neededAmountOfPlayers = (document.getElementById(
+                  "numberOfPlayers"
+                ) as HTMLInputElement)!.value;
+
+                socket.emit("createRoom", {
+                  newRoomName,
+                  neededAmountOfPlayers,
+                  status: false,
                 });
 
                 setShowModal(!showModal);
+                navigate(`/online/${newRoomName}`);
               }}
             >
               create room
@@ -59,7 +62,7 @@ const CreateNewRoom: FunctionComponent = () => {
           </fieldset>
         </Modal>
       ) : null}
-    </div>
+    </>
   );
 };
 

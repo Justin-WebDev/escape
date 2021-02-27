@@ -34,33 +34,29 @@ const Game: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [orderForPlayers]);
 
-  return players.length > 0 ? (
-    players.length > 1 ? (
-      <GameContext.Provider
-        value={{ currentPlayer, availableMoves, setAvailableMoves }}
-      >
-        <div id="game" className="game">
-          <div id="player-turn">
-            <div style={{ color: `${currentPlayer.color}` }}>
-              {currentPlayer.name}
-            </div>
-            <div>
-              {orderForPlayers.length > 1
-                ? currentPlayer.currentPosition === ""
-                  ? "Select Starting Position"
-                  : "Move"
-                : `${currentPlayer.name} WINS!`}
-            </div>
-            <hr />
+  return players.length > 1 ? (
+    <GameContext.Provider
+      value={{ currentPlayer, availableMoves, setAvailableMoves }}
+    >
+      <div id="game" className="game">
+        <div id="player-turn">
+          <div style={{ color: `${currentPlayer.color}` }}>
+            {currentPlayer.name}
           </div>
-          <Board />
+          <div>
+            {orderForPlayers.length > 1
+              ? currentPlayer.currentPosition === ""
+                ? "Select Starting Position"
+                : "Move"
+              : `${currentPlayer.name} WINS!`}
+          </div>
+          <hr />
         </div>
-      </GameContext.Provider>
-    ) : (
-      <div>{players[orderForPlayers[0]].name} WINS!</div>
-    )
+        <Board />
+      </div>
+    </GameContext.Provider>
   ) : (
-    <Redirect to="/" />
+    <div>{players[orderForPlayers[0]].name} WINS!</div>
   );
 };
 

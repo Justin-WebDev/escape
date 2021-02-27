@@ -1,75 +1,96 @@
-// const allUsers = {} as {
-//   [key: string]: { [socketid: string]: string };
-// };
 const allUsers = {};
 
-// exports.joinRoom = (
-//   socketid: string,
-//   username: string,
-//   room: string
-// ): { socketid: string; username: string; room: string } => {
-//   allUsers[room] = { ...allUsers[room], [socketid]: username };
-//   return { socketid, username, room };
-// };
-exports.joinRoom = (socketid, username, room) => {
-  allUsers[room] = { ...allUsers[room], [socketid]: username };
+/**
+ * allUsers = {
+ *  room: {
+ *    users: {
+ *      socketid : username,
+ *    },
+ *    neededAmountOfPlayers: # of players needed to start game,
+ *    status: is game in progress (true or false)
+ *  }
+ * }
+ */
+
+exports.joinRoom = (
+  socketid,
+  username,
+  room,
+  neededAmountOfPlayers,
+  status
+) => {
+  if (!allUsers[room]) {
+    allUsers[room] = {
+      users: { [socketid]: username },
+      neededAmountOfPlayers,
+      status,
+    };
+  } else {
+    allUsers[room] = {
+      ...allUsers[room],
+      users: { ...allUsers[room]["users"], [socketid]: username },
+    };
+  }
   return { socketid, username, room };
 };
 
-// exports.formatMessage = (username: string, message: string) => {
-//   return { username, message };
-// };
 exports.formatMessage = (username, message) => {
   return { username, message };
 };
 
-// exports.getAllUsers = (room: string) => {
-//   return Object.values(allUsers[room]).reduce((output, current) => {
-//     return { ...output, [current]: true };
-//   }, {});
-// };
+exports.getRoom = (socketid) => {
+  for (const room in allUsers) {
+    if (allUsers[room]["users"][socketid]) {
+      return room;
+    }
+  }
+  return null;
+};
+
 exports.getAllUsers = (room) => {
-  return Object.values(allUsers[room]).reduce((output, current) => {
-    return { ...output, [current]: true };
+  if (allUsers[room]) {
+    return Object.values(allUsers[room]["users"]).reduce((output, current) => {
+      return { ...output, [current]: true };
+    }, {});
+  }
+};
+
+exports.getAllRooms = () => {
+  return Object.keys(allUsers).reduce((output, current) => {
+    return current === "lobby"
+      ? output
+      : {
+          ...output,
+          [current]: Object.assign({}, allUsers[current], {
+            users: Object.keys(allUsers[current]["users"]).length,
+          }),
+        };
   }, {});
 };
 
-// exports.getCurrentUser = (socketid: string) => {
-//   for (const room in allUsers) {
-//     if (allUsers[room][socketid]) {
-//       return [allUsers[room][socketid], room];
-//     }
-//   }
-//   return null;
-// };
-
 exports.getCurrentUser = (socketid) => {
   for (const room in allUsers) {
-    if (allUsers[room][socketid]) {
-      return [allUsers[room][socketid], room];
+    if (allUsers[room]["users"][socketid]) {
+      return [allUsers[room]["users"][socketid], room];
     }
   }
   return null;
 };
 
-// exports.exitGame = (socketid: string) => {
-//   for (const room in allUsers) {
-//     if (allUsers[room][socketid]) {
-//       const username = allUsers[room][socketid];
-//       delete allUsers[room][socketid];
-//       return [username, room];
-//     }
-//   }
-//   return null;
-// };
-
-exports.exitGame = (socketid) => {
+exports.exitRoom = (socketid) => {
   for (const room in allUsers) {
-    if (allUsers[room][socketid]) {
-      const username = allUsers[room][socketid];
-      delete allUsers[room][socketid];
-      return [username, room];
+    if (allUsers[room]["users"]) {
+      if (allUsers[room]["users"][socketid]) {
+        const username = allUsers[room]["users"][socketid];
+        if (Object.keys(allUsers[room]["users"]).length === 1) {
+          delete allUsers[room];
+          return [username, null];
+        } else {
+          delete allUsers[room]["users"][socketid];
+          return [username, room];
+        }
+      }
     }
   }
-  return null;
+  return [null, null];
 };
