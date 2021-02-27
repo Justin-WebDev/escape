@@ -6,6 +6,7 @@ const allUsers = {};
  *    users: {
  *      socketid : username,
  *    },
+ *    boardSize: number
  *    neededAmountOfPlayers: # of players needed to start game,
  *    status: is game in progress (true or false)
  *  }
@@ -16,12 +17,14 @@ exports.joinRoom = (
   socketid,
   username,
   room,
+  boardSize,
   neededAmountOfPlayers,
   status
 ) => {
   if (!allUsers[room]) {
     allUsers[room] = {
       users: { [socketid]: username },
+      boardSize,
       neededAmountOfPlayers,
       status,
     };

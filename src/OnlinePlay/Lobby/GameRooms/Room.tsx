@@ -19,6 +19,7 @@ const Room: FunctionComponent<
     >
       <div>{roomName}</div>
       <div>
+        <div>{`Board Size: ${rooms[roomName].boardSize} x ${rooms[roomName].boardSize}`}</div>
         <div>{`Players: ${rooms[roomName].users} / ${rooms[roomName].neededAmountOfPlayers}`}</div>
         <div>
           {rooms[roomName].status ? "Game in Progress" : "Game Not Started"}

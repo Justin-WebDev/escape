@@ -46,8 +46,13 @@ const CreateNewRoom: FunctionComponent = () => {
                   "numberOfPlayers"
                 ) as HTMLInputElement)!.value;
 
+                const boardSize = (document.getElementById(
+                  "boardSize"
+                ) as HTMLInputElement)!.value;
+
                 socket.emit("createRoom", {
                   newRoomName,
+                  boardSize,
                   neededAmountOfPlayers,
                   status: false,
                 });
