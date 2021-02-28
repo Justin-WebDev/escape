@@ -16,48 +16,53 @@ import GameRoom from "./GameRoom";
 const color = "blue";
 
 const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
-  const { socket, playerName } = useContext(EscapeContext);
+  const { socket, username } = useContext(EscapeContext);
+  const [currentRoom, setCurrentRoom] = useState<string | null>(null);
 
   const [rooms, setRooms] = useState<{
     [key: string]: {
-      users: number;
+      players: number;
+      watchers: number;
+      boardSize: number;
       neededAmountOfPlayers: string;
       status: boolean;
     };
   }>({});
-  const [messages, setMessages] = useState<
-    { username: string; message: string }[]
-  >([]);
+  const [messages, setMessages] = useState<{ name: string; message: string }[]>(
+    []
+  );
   const [onlinePlayers, setOnlinePlayers] = useState<{
-    [key: string]: boolean;
-  }>({});
+    players: string[];
+    watchers: string[];
+  } | null>(null);
 
   useEffect(() => {
     socket.on(
-      "newRoom",
+      "updateLobby",
       ({
-        message: { username, message },
         allRooms,
-        users,
+        usersInRoom,
       }: {
-        message: { username: string; message: string };
         allRooms: { [key: string]: any };
-        users: { [key: string]: boolean };
+        usersInRoom: { players: string[]; watchers: string[] };
       }) => {
-        setOnlinePlayers(users);
-        setMessages([...messages, { username, message }]);
         setRooms(allRooms);
+        setOnlinePlayers(usersInRoom);
+      }
+    );
+    socket.on("changeRoom", (room: string) => setCurrentRoom(room));
+
+    socket.on(
+      "updateRoom",
+      (usersInRoom: { players: string[]; watchers: string[] }) => {
+        setOnlinePlayers(usersInRoom);
       }
     );
 
-    socket.on("roomUsers", (allUsers: { [key: string]: boolean }) => {
-      setOnlinePlayers(allUsers);
-    });
-
     socket.on(
       "message",
-      ({ username, message }: { username: string; message: string }) => {
-        setMessages([...messages, { username, message }]);
+      ({ name, message }: { name: string; message: string }) => {
+        setMessages([...messages, { name, message }]);
       }
     );
   });
@@ -70,9 +75,11 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
         messages,
         onlinePlayers,
         color,
+        currentRoom,
+        setCurrentRoom,
       }}
     >
-      {playerName ? (
+      {username ? (
         <div className="onlinePlayContainer">
           <Router>
             <Lobby path="/" />

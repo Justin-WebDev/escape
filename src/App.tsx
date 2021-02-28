@@ -2,54 +2,56 @@ import React, { useEffect, useState } from "react";
 import { Router } from "@reach/router";
 import { EscapeContext } from "./context";
 import Main from "./Main";
-import CreatePlayers from "./CreatePlayers";
-import Game from "./Game";
-import LocalPlay from "./LocalPlay";
+// import CreatePlayers from "./CreatePlayers";
+// import Game from "./Game";
+// import LocalPlay from "./LocalPlay";
 import OnlinePlay from "./OnlinePlay";
 import Login from "./OnlinePlay/Login";
 import { socket } from "./webSocket";
 
-interface IPlayerState {
-  name: string;
-  color: string;
-  currentPosition: string;
-}
+// interface IPlayerState {
+//   name: string;
+//   color: string;
+//   currentPosition: string;
+// }
 
 const App = () => {
-  const [boardSize, setBoardSize] = useState(4);
-  const [numberOfPlayers, setNumberOfPlayers] = useState(0);
-  const [players, setPlayers] = useState<IPlayerState[]>([]);
-  const [orderForPlayers, setOrderForPlayers] = useState<number[]>([]);
-  const [playerName, setPlayerName] = useState<string | null>(null);
+  // const [boardSize, setBoardSize] = useState(4);
+  // const [numberOfPlayers, setNumberOfPlayers] = useState(0);
+  // const [players, setPlayers] = useState<IPlayerState[]>([]);
+  // const [orderForPlayers, setOrderForPlayers] = useState<number[]>([]);
+  const [username, setUsername] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (numberOfPlayers > 0) {
-      let arr = [...Array(numberOfPlayers).keys()];
-      let newArr = [];
-      let count = numberOfPlayers - 1;
-      while (count >= 0) {
-        newArr.push(...arr.splice(Math.floor(Math.random() * count), 1));
-        count--;
-      }
-      setOrderForPlayers(newArr);
-    }
-  }, [numberOfPlayers]);
+  // useEffect(() => {
+  //   if (numberOfPlayers > 0) {
+  //     let arr = [...Array(numberOfPlayers).keys()];
+  //     let newArr = [];
+  //     let count = numberOfPlayers - 1;
+  //     while (count >= 0) {
+  //       newArr.push(...arr.splice(Math.floor(Math.random() * count), 1));
+  //       count--;
+  //     }
+  //     setOrderForPlayers(newArr);
+  //   }
+  // }, [numberOfPlayers]);
 
   return (
     <React.StrictMode>
       <EscapeContext.Provider
         value={{
-          boardSize,
-          numberOfPlayers,
-          setNumberOfPlayers,
-          setBoardSize,
-          players,
-          setPlayers,
-          orderForPlayers,
-          setOrderForPlayers,
+          // boardSize,
+          // numberOfPlayers,
+          // setNumberOfPlayers,
+          // setBoardSize,
+          // players,
+          // setPlayers,
+          // orderForPlayers,
+          // setOrderForPlayers,
           socket,
-          playerName,
-          setPlayerName,
+          username,
+          setUsername,
+          // playerName,
+          // setPlayerName,
         }}
       >
         <div

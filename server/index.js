@@ -8,8 +8,10 @@ const {
   getAllUsers,
   formatMessage,
   getCurrentUser,
-  exitRoom,
   getAllRooms,
+  leaveRoom,
+  createRoom,
+  getRoom,
 } = require("./utils");
 
 const PORT = 3000;
@@ -21,122 +23,84 @@ app.use("*", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  socket.on("joinRoom", async ({ username, roomName }) => {
-    if (socket.rooms.size > 1) {
-      const [username, room] = exitRoom(socket.id);
-      socket.leave(room);
-      const user = joinRoom(socket.id, username, roomName);
-      socket.join(user.room);
-      socket.broadcast.to("lobby").emit("newRoom", {
-        // change "lobby" to room
-        message: formatMessage(
-          "Jailer",
-          `${username} moved to another jail cell!`
-        ),
-        allRooms: getAllRooms(),
-        users: getAllUsers("lobby"), // change "lobby" to room
-      });
-      // welcomes user when they first connect
-      socket.emit(
-        "message",
-        formatMessage(
-          "Jailer",
-          `You entered the ${user.room} jail cell, ${user.username}! Good luck Escaping!`
-        )
-      );
-
-      // broadcasts when new user connects
-      socket.broadcast
-        .to(user.room)
-        .emit(
-          "message",
-          formatMessage("Jailer", `${user.username} entered the jail cell!`)
-        );
-
-      // sends users and room info to all users in room
-      io.to(user.room).emit("roomUsers", getAllUsers(user.room));
-    } else {
-      const user = joinRoom(socket.id, username, roomName);
-      socket.join(user.room);
-      // welcomes user when they first connect
-      socket.emit(
-        "message",
-        formatMessage(
-          "Jailer",
-          `You entered the ${user.room} jail cell, ${user.username}! Good luck Escaping!`
-        )
-      );
-
-      // broadcasts when new user connects
-      socket.broadcast
-        .to(user.room)
-        .emit(
-          "message",
-          formatMessage("Jailer", `${user.username} entered the jail cell!`)
-        );
-
-      // sends users and room info to all users in room
-      io.to(user.room).emit("roomUsers", getAllUsers(user.room));
-    }
-  });
-
-  socket.on("message", (message) => {
-    const [user, room] = getCurrentUser(socket.id);
-    if (user) {
-      io.to(room).emit("message", formatMessage(user, message));
-    }
-  });
-
   socket.on(
-    "createRoom",
-    ({ newRoomName, boardSize, neededAmountOfPlayers, status }) => {
-      const [username, room] = exitRoom(socket.id);
+    "joinRoom",
+    ({ username, oldRoom = null, newRoom, role = "watchers" }) => {
+      if (oldRoom) {
+        leaveRoom(socket.id, oldRoom);
+        socket.leave(oldRoom);
+        socket.broadcast.to(oldRoom).emit("updateRoom", getAllUsers(oldRoom));
+      }
 
-      const user = joinRoom(
-        socket.id,
-        username,
-        newRoomName,
-        boardSize,
-        neededAmountOfPlayers,
-        status
-      );
-      // if (room) {
-      socket.broadcast.to("lobby").emit("newRoom", {
-        // change "lobby" to room
-        message: formatMessage(
-          "Jailer",
-          `${username} moved to another jail cell!`
-        ),
-        allRooms: getAllRooms(),
-        users: getAllUsers("lobby"), // change "lobby" to room
-      });
-      // }
+      joinRoom(socket.id, username, newRoom, role);
+      socket.join(newRoom);
 
-      socket.leave(room);
-      socket.join(user.room);
+      socket.emit("changeRoom", newRoom);
 
-      socket.emit(
-        "message",
-        formatMessage(
-          "Jailer",
-          `You entered the ${user.room} jail cell, ${user.username}! Good luck Escaping!`
-        )
-      );
-
-      // sends users and room info to all users in room
-      io.to(user.room).emit("roomUsers", getAllUsers(user.room));
+      if (newRoom === "lobby") {
+        io.to("lobby").emit("updateLobby", {
+          allRooms: getAllRooms(),
+          usersInRoom: getAllUsers("lobby"),
+        });
+      } else {
+        socket.broadcast.to("lobby").emit("updateLobby", {
+          allRooms: getAllRooms(),
+          usersInRoom: getAllUsers("lobby"),
+        });
+        io.to(newRoom).emit("updateRoom", getAllUsers(newRoom));
+      }
     }
   );
 
-  socket.on("disconnect", () => {
-    const [username, room] = exitRoom(socket.id);
-    if (room) {
-      socket.broadcast
-        .to(room)
-        .emit("message", formatMessage("Jailer", `${username} left the game!`));
+  socket.on(
+    "createRoom",
+    ({
+      username,
+      currentRoom,
+      newRoom,
+      boardSize,
+      neededAmountOfPlayers,
+      role,
+    }) => {
+      leaveRoom(socket.id, currentRoom);
+      createRoom(newRoom, boardSize, neededAmountOfPlayers);
+      joinRoom(socket.id, username, newRoom, role);
+      socket.leave(currentRoom);
+      if (currentRoom !== "lobby") {
+        socket.broadcast
+          .to(currentRoom)
+          .emit("updateRoom", getAllUsers(currentRoom));
+      }
+      socket.broadcast.to("lobby").emit("updateLobby", {
+        allRooms: getAllRooms(),
+        usersInRoom: getAllUsers("lobby"),
+      });
 
-      io.to(room).emit("roomUsers", getAllUsers(room));
+      socket.join(newRoom);
+      socket.emit("roomChange", newRoom);
+
+      // sends users and room info to all users in room
+      io.to(newRoom).emit("updateRoom", getAllUsers(newRoom));
     }
+  );
+
+  socket.on("message", ({ username, message, currentRoom }) => {
+    io.to(currentRoom).emit("message", formatMessage(username, message));
+  });
+
+  socket.on("disconnect", () => {
+    const room = getRoom(socket.id);
+    if (room) {
+      leaveRoom(socket.id, room);
+
+      if (room !== "lobby") {
+        socket.broadcast.to(room).emit("updateRoom", getAllUsers(room));
+      }
+    }
+    socket.broadcast.to("lobby").emit("updateLobby", {
+      allRooms: getAllRooms(),
+      usersInRoom: getAllUsers("lobby"),
+    });
   });
 });
 

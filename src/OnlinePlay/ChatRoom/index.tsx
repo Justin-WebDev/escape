@@ -5,8 +5,8 @@ import OnlinePlayers from "./OnlinePlayers";
 import "./_chatRoom.scss";
 
 const ChatRoom = () => {
-  const { messages, color } = useContext(OnlinePlayContext);
-  const { socket, playerName } = useContext(EscapeContext);
+  const { messages, color, currentRoom } = useContext(OnlinePlayContext);
+  const { socket, username } = useContext(EscapeContext);
 
   return (
     <div className="chatRoomContainer">
@@ -14,13 +14,13 @@ const ChatRoom = () => {
       <div className="chatContainer">
         <div className="chat">
           {messages.map(
-            ({ username, message }: { username: string; message: string }) => {
-              return username === playerName ? (
-                <div style={{ color }}>{`${username}: ${message}`}</div>
-              ) : username === "Jailer" ? (
-                <div style={{ color: "red" }}>{`${username}: ${message}`}</div>
+            ({ name, message }: { name: string; message: string }) => {
+              return username === name ? (
+                <div style={{ color }}>{`${name}: ${message}`}</div>
+              ) : name === "Jailer" ? (
+                <div style={{ color: "red" }}>{`${name}: ${message}`}</div>
               ) : (
-                <div>{`${username}: ${message}`}</div>
+                <div>{`${name}: ${message}`}</div>
               );
             }
           )}
@@ -37,7 +37,11 @@ const ChatRoom = () => {
               const message = document.getElementById(
                 "messageInput"
               ) as HTMLFormElement;
-              socket.emit("message", message.value);
+              socket.emit("message", {
+                username,
+                message: message.value,
+                currentRoom,
+              });
               message.value = "";
             }}
           >

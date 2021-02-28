@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { EscapeContext } from "../../../context";
 import { OnlinePlayContext } from "../../OnlinePlayContext";
 
 const OnlinePlayers = () => {
-  const { onlinePlayers, color } = useContext(OnlinePlayContext);
-  const { playerName } = useContext(EscapeContext);
-
-  return (
+  const { username } = useContext(EscapeContext);
+  const { onlinePlayers, color, currentRoom } = useContext(OnlinePlayContext);
+  return onlinePlayers ? (
     <div
       style={{
         display: "flex",
@@ -19,14 +18,30 @@ const OnlinePlayers = () => {
         overflowY: "scroll",
       }}
     >
-      {Object.keys(onlinePlayers).map((player: string) =>
-        player === playerName ? (
-          <div style={{ color }}>{`${player} (you)`}</div>
-        ) : (
-          <div>{player}</div>
-        )
-      )}
+      {currentRoom === "lobby"
+        ? onlinePlayers.watchers.map((player: string) =>
+            player === username ? (
+              <div style={{ color }}>{`${player} (you)`}</div>
+            ) : (
+              <div>{player}</div>
+            )
+          )
+        : Object.keys(onlinePlayers).map((key) => {
+            return (
+              <div>
+                <div>{key}</div>
+                {onlinePlayers[key].map((player: string) =>
+                  player === username ? (
+                    <div style={{ color }}>{`${player} (you)`}</div>
+                  ) : (
+                    <div>{player}</div>
+                  )
+                )}
+              </div>
+            );
+          })}
     </div>
-  );
+  ) : null;
 };
+
 export default OnlinePlayers;

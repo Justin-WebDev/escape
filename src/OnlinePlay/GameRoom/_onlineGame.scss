@@ -1,7 +1,59 @@
 .onlineGame {
   grid-row: 1;
   height: 100%;
-  // display: flex;
-  // flex: 1;
-  background-color: bisque;
+  display: flex;
+  flex: 1;
+  background-color: cadetblue;
+
+  .leftContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 0.25;
+    height: 100%;
+
+    .turnOrderContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+      color: white;
+      flex: 1;
+
+      .turnOrder {
+        box-shadow: inset 0 0 10px 0 black;
+        margin: 10px;
+        background-color: #e9e9e9;
+        width: -webkit-fill-available;
+        color: black;
+        padding: 10px;
+        height: -webkit-fill-available;
+      }
+    }
+
+    .placesContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+      color: white;
+      flex: 1;
+
+      .places {
+        box-shadow: inset 0 0 10px 0 black;
+        margin: 10px;
+        background-color: #e9e9e9;
+        width: -webkit-fill-available;
+        color: black;
+        padding: 10px;
+        height: -webkit-fill-available;
+      }
+    }
+  }
+
+  .rightContainer {
+    display: flex;
+    flex: 1;
+  }
 }

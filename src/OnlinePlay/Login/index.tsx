@@ -9,7 +9,7 @@ import Modal from "../../Modal";
  * REPLACE WITH LOGIN / SIGN UP AND MAYBE CONTINUE AS GUEST
  */
 const Login: FunctionComponent<RouteComponentProps> = () => {
-  const { socket, setPlayerName } = useContext(EscapeContext);
+  const { socket, setUsername } = useContext(EscapeContext);
   const [showModal, setShowModal] = useState(true);
 
   return (
@@ -19,23 +19,23 @@ const Login: FunctionComponent<RouteComponentProps> = () => {
           <input
             type="text"
             placeholder="Enter Display Name..."
-            id="createPlayerName"
+            id="createUsername"
           />
           <br />
           <button
             onClick={() => {
-              const playerName = (document.getElementById(
-                "createPlayerName"
+              const username = (document.getElementById(
+                "createUsername"
               ) as HTMLFormElement).value;
 
-              setPlayerName(playerName);
+              setUsername(username);
               setShowModal(!showModal);
 
               socket.emit("joinRoom", {
-                username: playerName,
-                roomName: "lobby",
+                username,
+                newRoom: "lobby",
               });
-              navigate("../online");
+              navigate("/online");
             }}
           >
             Submit

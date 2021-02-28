@@ -2,11 +2,13 @@ import { navigate } from "@reach/router";
 import React, { FunctionComponent, useContext, useState } from "react";
 import { EscapeContext } from "../../context";
 import Modal from "../../Modal";
+import { OnlinePlayContext } from "../OnlinePlayContext";
 // import useRoom from "./Room";
 
 const CreateNewRoom: FunctionComponent = () => {
   const [showModal, setShowModal] = useState(false);
-  const { socket } = useContext(EscapeContext);
+  const { socket, username } = useContext(EscapeContext);
+  const { currentRoom, setCurrentRoom } = useContext(OnlinePlayContext);
   return (
     <>
       <button
@@ -38,7 +40,7 @@ const CreateNewRoom: FunctionComponent = () => {
             <br />
             <button
               onClick={() => {
-                const newRoomName = (document.getElementById(
+                const newRoom = (document.getElementById(
                   "roomName"
                 ) as HTMLInputElement)!.value;
 
@@ -51,14 +53,16 @@ const CreateNewRoom: FunctionComponent = () => {
                 ) as HTMLInputElement)!.value;
 
                 socket.emit("createRoom", {
-                  newRoomName,
-                  boardSize,
+                  username,
+                  currentRoom,
+                  newRoom,
+                  role: "players",
                   neededAmountOfPlayers,
-                  status: false,
+                  boardSize,
                 });
-
+                setCurrentRoom(newRoom);
                 setShowModal(!showModal);
-                navigate(`/online/${newRoomName}`);
+                navigate(`/online/${newRoom}`);
               }}
             >
               create room

@@ -31,22 +31,20 @@
       overflow-x: scroll;
       flex: 1;
       .room {
-        width: 30%;
-        height: 40%;
+        width: -webkit-fill-available;
+        // height: 40%;
         // background-color: black;
         margin-left: 25px;
         margin-top: 25px;
+        margin-right: 25px;
         border-radius: 8px;
         box-shadow: 0px 0px 5px black;
         background-color: white;
         // border: 5px dashed darkgrey;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
         font-size: 2em;
-        text-align: center;
-        color: darkgrey;
+        // color: darkgrey;
       }
     }
   }
