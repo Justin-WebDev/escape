@@ -20,7 +20,7 @@ const Login: FunctionComponent<RouteComponentProps> = () => {
   const inputEl = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    inputEl.current.focus();
+    inputEl!.current!.focus();
   }, []);
 
   return (
