@@ -7,11 +7,18 @@ const {
   joinRoom,
   getAllUsers,
   formatMessage,
-  getCurrentUser,
   getAllRooms,
   leaveRoom,
   createRoom,
   getRoom,
+  setColor,
+  getPlayersAndColors,
+  areAllPlayersReady,
+  createAvailableMoves,
+  setOrderForPlayers,
+  getBoardSize,
+  removeMove,
+  getNextPlayer,
 } = require("./utils");
 
 const PORT = 3000;
@@ -87,6 +94,49 @@ io.on("connection", (socket) => {
   socket.on("message", ({ username, message, currentRoom }) => {
     io.to(currentRoom).emit("message", formatMessage(username, message));
   });
+
+  socket.on("ready", ({ color, currentRoom, username }) => {
+    setColor(socket.id, color, currentRoom);
+    socket.emit("allColors", getPlayersAndColors(currentRoom));
+    socket.broadcast.to(currentRoom).emit("choseColor", { username, color });
+
+    if (areAllPlayersReady(currentRoom)) {
+      const availableMoves = createAvailableMoves(currentRoom);
+      const order = setOrderForPlayers(currentRoom);
+      const boardSize = getBoardSize(currentRoom);
+      io.to(currentRoom).emit("gameIsReady", {
+        moves: availableMoves,
+        order,
+        size: boardSize,
+      });
+    }
+  });
+
+  socket.on(
+    "playerMoved",
+    ({
+      newX,
+      newY,
+      oldX,
+      oldY,
+      color,
+      currentRoom,
+      availableMoves,
+      orderForPlayers,
+    }) => {
+      const moves = removeMove(availableMoves, newX, newY, oldX, oldY);
+      const order = getNextPlayer(orderForPlayers);
+      io.to(currentRoom).emit("playerMoved", {
+        newX,
+        newY,
+        oldX,
+        oldY,
+        color,
+        moves,
+        order,
+      });
+    }
+  );
 
   socket.on("disconnect", () => {
     const room = getRoom(socket.id);

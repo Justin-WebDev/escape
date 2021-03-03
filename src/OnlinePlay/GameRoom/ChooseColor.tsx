@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
 import { EscapeContext } from "../../context";
 import Modal from "../../Modal";
+import { OnlinePlayContext } from "../OnlinePlayContext";
 import { OnlineGameContext } from "./OnlineGameContext";
 
 const ChooseColor = () => {
-  const { username } = useContext(EscapeContext);
+  const { username, socket } = useContext(EscapeContext);
   const { setColor } = useContext(OnlineGameContext);
+  const { currentRoom } = useContext(OnlinePlayContext);
   const [showModal, setShowModal] = useState(true);
 
   return showModal ? (
@@ -28,6 +30,7 @@ const ChooseColor = () => {
               .value;
             setColor(color);
             setShowModal(!showModal);
+            socket.emit("ready", { color, currentRoom, username });
           }}
         >
           Join Table

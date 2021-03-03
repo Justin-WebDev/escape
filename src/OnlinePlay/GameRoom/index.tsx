@@ -1,20 +1,114 @@
-import { RouteComponentProps } from "@reach/router";
-import React, { FunctionComponent, useState } from "react";
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { EscapeContext } from "../../context";
+import { OnlinePlayContext } from "../OnlinePlayContext";
+import LeftContainer from "./LeftContainer";
 import { OnlineGameContext } from "./OnlineGameContext";
-import OnlineGame from "./OnlineGame";
+import RightContainer from "./RightContainer";
 import ChooseColor from "./ChooseColor";
+import "./_onlineGame.scss";
+import { addPlayerBorder } from "./RightContainer/Game/Board/utils/addPlayerBorder";
+import { removePlayerBorder } from "./RightContainer/Game/Board/utils/removePlayerBorder";
+import { RouteComponentProps } from "@reach/router";
+import { drawLine } from "./RightContainer/Game/Board/utils/drawLine";
 
-const GameRoom: FunctionComponent<RouteComponentProps> = () => {
+const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
+  const { socket, username } = useContext(EscapeContext);
+  const { onlinePlayers } = useContext(OnlinePlayContext);
   const [color, setColor] = useState<string | null>(null);
+  const [boardSize, setBoardSize] = useState<number | null>(null);
   const [currentPosition, setCurrentPosition] = useState<number[] | null>(null);
+  const [isGameReady, setIsGameReady] = useState(false);
+  const [availableMoves, setAvailableMoves] = useState<{
+    [key: string]: string[];
+  }>({});
+  const [orderForPlayers, setOrderForPlayers] = useState<number[]>([]);
+  const [mostRecentMove, setMostRecentMove] = useState<{
+    newX: number;
+    newY: number;
+    oldX: number;
+    oldY: number;
+    color: string;
+  } | null>(null);
+
+  // useEffect(() => {
+  socket.on(
+    "gameIsReady",
+    ({
+      moves,
+      order,
+      size,
+    }: {
+      moves: { [key: string]: string[] };
+      order: number[];
+      size: number;
+    }) => {
+      setAvailableMoves({ ...moves });
+      setOrderForPlayers([...order]);
+      setBoardSize(size);
+      setIsGameReady(true);
+    }
+  );
+  // }, []);
+  useEffect(() => {
+    socket.on(
+      "playerMoved",
+      ({
+        newX,
+        newY,
+        oldX,
+        oldY,
+        color,
+        moves,
+        order,
+      }: {
+        newX: number;
+        newY: number;
+        oldX: number;
+        oldY: number;
+        color: string;
+        moves: { [key: string]: string[] };
+        order: number[];
+      }) => {
+        setMostRecentMove({ newX, newY, oldX, oldY, color });
+        setOrderForPlayers(order);
+        setAvailableMoves(moves);
+        drawLine(newX, newY, oldX, oldY, color);
+        removePlayerBorder(oldX, oldY);
+        addPlayerBorder(newX, newY, color);
+      }
+    );
+  }, []);
 
   return (
     <OnlineGameContext.Provider
-      value={{ color, setColor, currentPosition, setCurrentPosition }}
+      value={{
+        availableMoves,
+        orderForPlayers,
+        color,
+        setColor,
+        currentPosition,
+        setCurrentPosition,
+        isGameReady,
+        setOrderForPlayers,
+        setAvailableMoves,
+        mostRecentMove,
+        boardSize,
+      }}
     >
-      {color ? <OnlineGame /> : <ChooseColor />}
+      <div className="onlineGame">
+        {onlinePlayers.players.includes(username) && !color ? (
+          <ChooseColor />
+        ) : null}
+        <LeftContainer />
+        <RightContainer />
+      </div>
     </OnlineGameContext.Provider>
   );
 };
 
-export default GameRoom;
+export default OnlineGame;

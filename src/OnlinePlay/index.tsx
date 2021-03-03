@@ -11,7 +11,7 @@ import { EscapeContext } from "../context";
 
 import "./_onlinePlay.scss";
 import Lobby from "./Lobby";
-import GameRoom from "./GameRoom";
+import OnlineGame from "./GameRoom";
 
 const color = "blue";
 
@@ -65,7 +65,7 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
         setMessages([...messages, { name, message }]);
       }
     );
-  });
+  }, []);
 
   return (
     <OnlinePlayContext.Provider
@@ -83,7 +83,7 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
         <div className="onlinePlayContainer">
           <Router>
             <Lobby path="/" />
-            <GameRoom path=":id" />
+            <OnlineGame path=":id" />
           </Router>
           <ChatRoom />
         </div>
