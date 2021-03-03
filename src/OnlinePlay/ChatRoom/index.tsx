@@ -10,7 +10,6 @@ const ChatRoom = () => {
 
   return (
     <div className="chatRoomContainer">
-      <OnlinePlayers />
       <div className="chatContainer">
         <div className="chat">
           {messages.map(
@@ -18,7 +17,9 @@ const ChatRoom = () => {
               return username === name ? (
                 <div style={{ color }}>{`${name}: ${message}`}</div>
               ) : name === "Jailer" ? (
-                <div style={{ color: "red" }}>{`${name}: ${message}`}</div>
+                <div style={{ color: "red", textAlign: "center" }}>
+                  <i>{message}</i>
+                </div>
               ) : (
                 <div>{`${name}: ${message}`}</div>
               );
@@ -31,6 +32,21 @@ const ChatRoom = () => {
             id="messageInput"
             placeholder="Enter message..."
             style={{ flex: "1" }}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                const message = document.getElementById(
+                  "messageInput"
+                ) as HTMLFormElement;
+                socket.emit("message", {
+                  username,
+                  message: message.value,
+                  currentRoom,
+                });
+                message.value = "";
+                message.focus();
+              }
+            }}
           />
           <button
             onClick={() => {
@@ -43,12 +59,14 @@ const ChatRoom = () => {
                 currentRoom,
               });
               message.value = "";
+              message.focus();
             }}
           >
             Send
           </button>
         </div>
       </div>
+      <OnlinePlayers />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Link, navigate, RouteComponentProps } from "@reach/router";
+import { navigate, RouteComponentProps } from "@reach/router";
 import React, {
   FunctionComponent,
   useContext,
@@ -32,24 +32,57 @@ const Room: FunctionComponent<
 
   return roomName ? (
     <div className="room" key={index}>
-      <div style={{ gridColumn: "1", textAlign: "center" }}>{roomName}</div>
       <div
-        style={{ gridColumn: "2", textAlign: "center" }}
+        style={{
+          gridColumn: "1",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {roomName}
+      </div>
+      <div
+        style={{
+          gridColumn: "2",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >{`${rooms[roomName].boardSize} x ${rooms[roomName].boardSize}`}</div>
       <div
-        style={{ gridColumn: "3", textAlign: "center" }}
+        style={{
+          gridColumn: "3",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >{`${rooms[roomName].players} / ${rooms[roomName].neededAmountOfPlayers}`}</div>
-      <div style={{ gridColumn: "4", textAlign: "center" }}>
+      <div
+        style={{
+          gridColumn: "4",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         {rooms[roomName].watchers}
       </div>
-      <div style={{ gridColumn: "5", textAlign: "center" }}>
-        {rooms[roomName].status ? "Game in Progress" : "Game Not Started"}
+      <div
+        style={{
+          gridColumn: "5",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {rooms[roomName].status ? "In Progress" : "Not Started"}
       </div>
       <div
         style={{
           gridColumn: "6",
           display: "flex",
-          justifyContent: "space-evenly",
+          justifyContent: "center",
         }}
       >
         <button
@@ -60,7 +93,6 @@ const Room: FunctionComponent<
               newRoom: roomName,
               role: "players",
             });
-            // setCurrentRoom(roomName);
             navigate(`/online/${roomName}`);
           }}
           disabled={isFull}

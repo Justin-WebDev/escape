@@ -56,6 +56,11 @@ exports.createRoom = (room, boardSize, neededAmountOfPlayers) => {
   };
 };
 
+exports.removePlayer = (order, places) => {
+  const playerThatLost = order.shift();
+  return [order, [playerThatLost, ...places]];
+};
+
 exports.removeMove = (availableMoves, newX, newY, oldX, oldY) => {
   availableMoves[`${newX}${newY}`].splice(
     availableMoves[`${newX}${newY}`].findIndex(

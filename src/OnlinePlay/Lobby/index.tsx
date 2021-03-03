@@ -6,8 +6,8 @@ import GameRooms from "./GameRooms";
 const Lobby: FunctionComponent<RouteComponentProps> = () => {
   return (
     <div className="onlineGameAreaContainer">
-      <CreateNewRoom />
       <GameRooms />
+      {/* <CreateNewRoom /> */}
     </div>
   );
 };

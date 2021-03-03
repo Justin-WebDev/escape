@@ -1,11 +1,24 @@
 .chatRoomContainer {
   grid-row: 2;
   height: 100%;
-  background-color: cadetblue;
+  background-color: #77b28c;
   display: flex;
-  width: 100vw;
+  width: 100%;
+  opacity: 0.8;
   // flex-direction: column;
   // justify-content: space-between;
+  .onlinePlayersContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 0.25;
+    padding: 10px;
+    // box-shadow: inset 0 0 10px 0 black;
+    box-shadow: 0 0 5px black;
+    margin: 10px;
+    background-color: #e9e9e9;
+    overflow-y: scroll;
+    border-radius: 0px 4px 4px 0px;
+  }
 
   .chatContainer {
     display: flex;

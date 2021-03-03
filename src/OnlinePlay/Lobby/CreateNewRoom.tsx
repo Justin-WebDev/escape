@@ -3,7 +3,6 @@ import React, { FunctionComponent, useContext, useState } from "react";
 import { EscapeContext } from "../../context";
 import Modal from "../../Modal";
 import { OnlinePlayContext } from "../OnlinePlayContext";
-// import useRoom from "./Room";
 
 const CreateNewRoom: FunctionComponent = () => {
   const [showModal, setShowModal] = useState(false);

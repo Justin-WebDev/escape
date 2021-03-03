@@ -26,6 +26,7 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
   const [availableMoves, setAvailableMoves] = useState<{
     [key: string]: string[];
   }>({});
+  const [places, setPlaces] = useState<number[]>([]);
   const [orderForPlayers, setOrderForPlayers] = useState<number[]>([]);
   const [mostRecentMove, setMostRecentMove] = useState<{
     newX: number;
@@ -82,7 +83,29 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
         addPlayerBorder(newX, newY, color);
       }
     );
+
+    socket.on(
+      "playerLost",
+      ({ order, newPlaces }: { order: number[]; newPlaces: number[] }) => {
+        console.log({ order, newPlaces });
+        setPlaces(newPlaces);
+        setOrderForPlayers(order);
+      }
+    );
   }, []);
+
+  useEffect(() => {
+    if (currentPosition && orderForPlayers.length > 0) {
+      if (
+        onlinePlayers.players[orderForPlayers[0]] === username &&
+        (availableMoves[`${currentPosition![0]}${currentPosition![1]}`]
+          .length === 0 ||
+          orderForPlayers.length <= 1)
+      ) {
+        socket.emit("playerLost", { orderForPlayers, places });
+      }
+    }
+  }, [orderForPlayers]);
 
   return (
     <OnlineGameContext.Provider
@@ -98,6 +121,7 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
         setAvailableMoves,
         mostRecentMove,
         boardSize,
+        places,
       }}
     >
       <div className="onlineGame">

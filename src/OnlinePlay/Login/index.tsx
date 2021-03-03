@@ -1,5 +1,11 @@
 import { navigate, RouteComponentProps } from "@reach/router";
-import React, { FunctionComponent, useContext, useState } from "react";
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { EscapeContext } from "../../context";
 import Modal from "../../Modal";
 
@@ -11,6 +17,11 @@ import Modal from "../../Modal";
 const Login: FunctionComponent<RouteComponentProps> = () => {
   const { socket, setUsername } = useContext(EscapeContext);
   const [showModal, setShowModal] = useState(true);
+  const inputEl = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputEl.current.focus();
+  }, []);
 
   return (
     <div>
@@ -18,8 +29,26 @@ const Login: FunctionComponent<RouteComponentProps> = () => {
         <Modal>
           <input
             type="text"
+            ref={inputEl}
             placeholder="Enter Display Name..."
             id="createUsername"
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                const username = (document.getElementById(
+                  "createUsername"
+                ) as HTMLFormElement).value;
+
+                setUsername(username);
+                setShowModal(!showModal);
+
+                socket.emit("joinRoom", {
+                  username,
+                  newRoom: "lobby",
+                });
+                navigate("/online");
+              }
+            }}
           />
           <br />
           <button

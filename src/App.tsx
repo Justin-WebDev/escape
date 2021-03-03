@@ -7,7 +7,7 @@ import Login from "./OnlinePlay/Login";
 import { socket } from "./webSocket";
 
 const App = () => {
-  const [username, setUsername] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null); // set back to null
 
   return (
     <React.StrictMode>
@@ -20,32 +20,28 @@ const App = () => {
       >
         <div
           style={{
-            display: "grid",
-            gridTemplateRows: "10vh 90vh",
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "5rem",
+            // fontWeight: "bold",
+            backgroundColor: "#77b28c",
+            color: "#157A6E",
+            // color: "#499F68",
+            // boxShadow: "0 0 5px black",
+            textShadow: "0 5px 5px black",
+            opacity: ".8",
           }}
         >
-          <div
-            style={{
-              height: "100%",
-              gridRow: "1",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "flex-end",
-              fontSize: "5rem",
-              fontWeight: "bold",
-            }}
-          >
-            ESCAPE
-          </div>
-          <Router>
-            <Main path="/" />
-            <Login path="login" />
-            <OnlinePlay path="online/*" />
-            {/* <LocalPlay path="local" />
+          ESCAPE
+        </div>
+        <Router style={{ flex: "1" }}>
+          <Main path="/" />
+          <Login path="login" />
+          <OnlinePlay path="online/*" />
+          {/* <LocalPlay path="local" />
             <CreatePlayers path="local/players" />
             <Game path="game" /> */}
-          </Router>
-        </div>
+        </Router>
       </EscapeContext.Provider>
     </React.StrictMode>
   );

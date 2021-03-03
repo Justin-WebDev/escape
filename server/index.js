@@ -19,6 +19,7 @@ const {
   getBoardSize,
   removeMove,
   getNextPlayer,
+  removePlayer,
 } = require("./utils");
 
 const PORT = 3000;
@@ -137,6 +138,12 @@ io.on("connection", (socket) => {
       });
     }
   );
+
+  socket.on("playerLost", ({ orderForPlayers, places }) => {
+    const [order, newPlaces] = removePlayer(orderForPlayers, places);
+    const room = getRoom(socket.id);
+    io.to(room).emit("playerLost", { order, newPlaces });
+  });
 
   socket.on("disconnect", () => {
     const room = getRoom(socket.id);

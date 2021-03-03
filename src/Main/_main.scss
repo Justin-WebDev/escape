@@ -1,15 +1,7 @@
-h1 {
-  font-size: 100px;
-  letter-spacing: 10px;
-  text-align: center;
-}
-
 .main {
-  grid-row: 2;
   height: 100%;
   width: 100%;
   display: flex;
-  // flex-direction: column;
   justify-content: center;
   align-items: center;
 }
