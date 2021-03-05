@@ -15,6 +15,7 @@ import { addPlayerBorder } from "./RightContainer/Game/Board/utils/addPlayerBord
 import { removePlayerBorder } from "./RightContainer/Game/Board/utils/removePlayerBorder";
 import { RouteComponentProps } from "@reach/router";
 import { drawLine } from "./RightContainer/Game/Board/utils/drawLine";
+import TurnOrder from "./LeftContainer/TurnOrder";
 
 const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
   const { socket, username } = useContext(EscapeContext);
@@ -36,25 +37,26 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
     color: string;
   } | null>(null);
 
-  // useEffect(() => {
-  socket.on(
-    "gameIsReady",
-    ({
-      moves,
-      order,
-      size,
-    }: {
-      moves: { [key: string]: string[] };
-      order: number[];
-      size: number;
-    }) => {
-      setAvailableMoves({ ...moves });
-      setOrderForPlayers([...order]);
-      setBoardSize(size);
-      setIsGameReady(true);
-    }
-  );
-  // }, []);
+  useEffect(() => {
+    socket.on(
+      "gameIsReady",
+      ({
+        moves,
+        order,
+        size,
+      }: {
+        moves: { [key: string]: string[] };
+        order: number[];
+        size: number;
+      }) => {
+        setAvailableMoves({ ...moves });
+        setOrderForPlayers([...order]);
+        setBoardSize(size);
+        setIsGameReady(true);
+      }
+    );
+  });
+
   useEffect(() => {
     socket.on(
       "playerMoved",
@@ -87,15 +89,23 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
     socket.on(
       "playerLost",
       ({ order, newPlaces }: { order: number[]; newPlaces: number[] }) => {
-        console.log({ order, newPlaces });
         setPlaces(newPlaces);
         setOrderForPlayers(order);
       }
     );
   }, []);
 
+  // socket.on(
+  //   "gameEnded",
+  //   ({ isGameReady, isNull }: { isGameReady: boolean; isNull: null }) => {
+  //     setIsGameReady(isGameReady);
+  //     setCurrentPosition(isNull);
+  //     setMostRecentMove(isNull);
+  //   }
+  // );
+
   useEffect(() => {
-    if (currentPosition && orderForPlayers.length > 0) {
+    if (availableMoves && currentPosition && orderForPlayers.length > 0) {
       if (
         onlinePlayers.players[orderForPlayers[0]] === username &&
         (availableMoves[`${currentPosition![0]}${currentPosition![1]}`]
@@ -103,6 +113,7 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
           orderForPlayers.length <= 1)
       ) {
         socket.emit("playerLost", { orderForPlayers, places });
+        socket.emit("gameEnded");
       }
     }
   }, [orderForPlayers]);
@@ -117,9 +128,11 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
         currentPosition,
         setCurrentPosition,
         isGameReady,
+        setIsGameReady,
         setOrderForPlayers,
         setAvailableMoves,
         mostRecentMove,
+        setMostRecentMove,
         boardSize,
         places,
       }}
@@ -128,7 +141,8 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
         {onlinePlayers.players.includes(username) && !color ? (
           <ChooseColor />
         ) : null}
-        <LeftContainer />
+
+        <TurnOrder />
         <RightContainer />
       </div>
     </OnlineGameContext.Provider>

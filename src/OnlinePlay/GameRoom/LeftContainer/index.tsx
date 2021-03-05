@@ -5,7 +5,7 @@ import TurnOrder from "./TurnOrder";
 const LeftContainer: FunctionComponent = () => (
   <div className="leftContainer">
     <TurnOrder />
-    <Places />
+    {/* <Places /> */}
   </div>
 );
 

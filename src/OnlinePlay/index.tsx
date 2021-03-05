@@ -58,14 +58,16 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
         setOnlinePlayers(usersInRoom);
       }
     );
+  }, []);
 
+  useEffect(() => {
     socket.on(
       "message",
       ({ name, message }: { name: string; message: string }) => {
         setMessages([...messages, { name, message }]);
       }
     );
-  }, []);
+  });
 
   return (
     <OnlinePlayContext.Provider

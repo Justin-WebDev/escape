@@ -96,6 +96,12 @@ io.on("connection", (socket) => {
     io.to(currentRoom).emit("message", formatMessage(username, message));
   });
 
+  socket.on("gameEnded", () => {
+    setColor(socket.id, "", getRoom(socket.id));
+
+    socket.emit("gameEnded", { isGameReady: false, isNull: null });
+  });
+
   socket.on("ready", ({ color, currentRoom, username }) => {
     setColor(socket.id, color, currentRoom);
     socket.emit("allColors", getPlayersAndColors(currentRoom));

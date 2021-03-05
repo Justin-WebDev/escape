@@ -32,6 +32,7 @@ const Login: FunctionComponent<RouteComponentProps> = () => {
             ref={inputEl}
             placeholder="Enter Display Name..."
             id="createUsername"
+            autoComplete="off"
             onKeyPress={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();

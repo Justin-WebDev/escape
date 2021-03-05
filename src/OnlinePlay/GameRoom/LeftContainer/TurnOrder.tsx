@@ -6,25 +6,33 @@ const TurnOrder = () => {
   const { orderForPlayers } = useContext(OnlineGameContext);
   const { onlinePlayers } = useContext(OnlinePlayContext);
 
-  return (
+  return orderForPlayers.length > 0 ? (
     <div className="turnOrderContainer">
-      Turn Order
-      <div className="turnOrder">
+      <div style={{ marginTop: "20px" }}>Turn Order</div>
+      <div className="turnOrder" style={{ marginTop: "10px" }}>
         {orderForPlayers
           ? orderForPlayers.map((player: number, index: number) => {
               switch (index) {
                 case 0:
-                  return <div>{`Now: ${onlinePlayers.players[player]}`}</div>;
+                  return (
+                    <div
+                      style={{ fontSize: "2rem", marginRight: "10px" }}
+                    >{`Now: ${onlinePlayers.players[player]}`}</div>
+                  );
                 case 1:
-                  return <div>{`Next: ${onlinePlayers.players[player]}`}</div>;
+                  return (
+                    <div
+                      style={{ fontSize: "1.5rem", marginLeft: "10px" }}
+                    >{`Next: ${onlinePlayers.players[player]}`}</div>
+                  );
                 default:
-                  return <div>{`${onlinePlayers.players[player]}`}</div>;
+                  return null;
               }
             })
           : null}
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default TurnOrder;
