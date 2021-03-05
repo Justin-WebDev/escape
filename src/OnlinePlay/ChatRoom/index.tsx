@@ -32,6 +32,7 @@ const ChatRoom = () => {
             id="messageInput"
             placeholder="Enter message..."
             style={{ flex: "1" }}
+            autoComplete="off"
             onKeyPress={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
