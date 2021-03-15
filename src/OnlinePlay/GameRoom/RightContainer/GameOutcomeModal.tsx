@@ -63,7 +63,7 @@ const GameOutcomeModal = () => {
                 username,
                 oldRoom: currentRoom,
                 newRoom: "lobby",
-                role: "players",
+                role: "watchers",
               });
               navigate("../online");
               setShowModal(!showModal);
