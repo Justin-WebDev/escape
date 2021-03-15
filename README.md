@@ -1,6 +1,6 @@
 # escape
 
-![Escape](Users/Justin/justin/Downloads/Escape.gif)
+![Escape](Escape.gif)
 
 ## Building and running on localhost
 
