@@ -6,14 +6,14 @@ import React, {
 } from "react";
 import { OnlinePlayContext } from "../OnlinePlayContext";
 import { OnlineGameContext } from "./OnlineGameContext";
-import RightContainer from "./RightContainer";
+import RightContainer from "./GameContainer";
 import ChooseColor from "./ChooseColor";
 import "./_onlineGame.scss";
-import { addPlayerBorder } from "./RightContainer/Game/Board/utils/addPlayerBorder";
-import { removePlayerBorder } from "./RightContainer/Game/Board/utils/removePlayerBorder";
+import { addPlayerBorder } from "./GameContainer/Game/Board/utils/addPlayerBorder";
+import { removePlayerBorder } from "./GameContainer/Game/Board/utils/removePlayerBorder";
 import { RouteComponentProps } from "@reach/router";
-import { drawLine } from "./RightContainer/Game/Board/utils/drawLine";
-import TurnOrder from "./LeftContainer/TurnOrder";
+import { drawLine } from "./GameContainer/Game/Board/utils/drawLine";
+import TurnOrder from "./TurnOrder";
 
 const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
   const { socket, username, onlinePlayers } = useContext(OnlinePlayContext);

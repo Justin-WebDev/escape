@@ -6,10 +6,7 @@ const Main: FunctionComponent<RouteComponentProps> = () => {
   return (
     <div className="main">
       <Link to="/online" style={{ textDecoration: "none" }}>
-        <button>Online Play</button>
-      </Link>
-      <Link to="/local" style={{ textDecoration: "none" }}>
-        <button disabled={true}>Local Play</button>
+        <button>Play</button>
       </Link>
     </div>
   );

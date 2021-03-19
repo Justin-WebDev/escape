@@ -24,9 +24,6 @@ const App = () => (
     <Router style={{ flex: "1" }}>
       <Main path="/" />
       <OnlinePlay path="online/*" />
-      {/* <LocalPlay path="local" />
-            <CreatePlayers path="local/players" />
-            <Game path="game" /> */}
     </Router>
   </React.StrictMode>
 );
