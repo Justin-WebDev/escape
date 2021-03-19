@@ -4,13 +4,7 @@ import { OnlinePlayContext } from "../OnlinePlayContext";
 import GameRooms from "./GameRooms";
 
 const Lobby: FunctionComponent<RouteComponentProps> = () => {
-  const {
-    socket,
-    username,
-    currentRoom,
-    setRooms,
-    setOnlinePlayers,
-  } = useContext(OnlinePlayContext);
+  const { socket, username, currentRoom } = useContext(OnlinePlayContext);
 
   useEffect(() => {
     socket.emit("joinRoom", {

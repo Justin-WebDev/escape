@@ -20,12 +20,12 @@ const Room: FunctionComponent<
         rooms[roomName].players >= rooms[roomName].neededAmountOfPlayers &&
         isFull === false
       ) {
-        setIsFull(true);
+        setIsFull(() => true);
       } else if (
         rooms[roomName].players < rooms[roomName].neededAmountOfPlayers &&
         isFull === true
       ) {
-        setIsFull(false);
+        setIsFull(() => false);
       }
     }
   }, [rooms]);

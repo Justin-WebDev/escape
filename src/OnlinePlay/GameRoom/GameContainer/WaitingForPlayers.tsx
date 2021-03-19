@@ -1,8 +1,15 @@
-import React, { useContext } from "react";
+import React, { FunctionComponent, useContext, useEffect } from "react";
 import { OnlinePlayContext } from "../../OnlinePlayContext";
 
-const WaitingForPlayers = () => {
+const WaitingForPlayers: FunctionComponent = () => {
   const { socket, onlinePlayers } = useContext(OnlinePlayContext);
+
+  useEffect(() => {
+    return () => {
+      socket.removeAllListeners("choseColor");
+      socket.removeAllListeners("allColors");
+    };
+  }, []);
 
   socket.on(
     "choseColor",
