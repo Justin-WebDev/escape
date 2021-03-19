@@ -3,6 +3,8 @@ export const addPlayerBorder = (x: number, y: number, playerColor: string) => {
   const oldBorders = clickedDot?.style.boxShadow;
   let oldBordersArray: string[] = [];
 
+  console.log({ clickedDot, oldBorders, oldBordersArray });
+
   if (oldBorders) {
     const re = /(?=(rgb))/;
     oldBordersArray = oldBorders.split(re);

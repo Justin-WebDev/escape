@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import { OnlinePlayContext } from "../OnlinePlayContext";
 import { OnlineGameContext } from "./OnlineGameContext";
-import RightContainer from "./GameContainer";
+import GameContainer from "./GameContainer";
 import ChooseColor from "./ChooseColor";
 import "./_onlineGame.scss";
 import { addPlayerBorder } from "./GameContainer/Game/Board/utils/addPlayerBorder";
@@ -46,13 +46,13 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
         order: number[];
         size: number;
       }) => {
-        setAvailableMoves({ ...moves });
-        setOrderForPlayers([...order]);
-        setBoardSize(size);
-        setIsGameReady(true);
+        setAvailableMoves(() => moves);
+        setOrderForPlayers(() => order);
+        setBoardSize(() => size);
+        setIsGameReady(() => true);
       }
     );
-  });
+  }, []);
 
   useEffect(() => {
     socket.on(
@@ -74,9 +74,9 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
         moves: { [key: string]: string[] };
         order: number[];
       }) => {
-        setMostRecentMove({ newX, newY, oldX, oldY, color });
-        setOrderForPlayers(order);
-        setAvailableMoves(moves);
+        setMostRecentMove(() => ({ newX, newY, oldX, oldY, color }));
+        setOrderForPlayers(() => order);
+        setAvailableMoves(() => moves);
         drawLine(newX, newY, oldX, oldY, color);
         removePlayerBorder(oldX, oldY);
         addPlayerBorder(newX, newY, color);
@@ -86,10 +86,15 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
     socket.on(
       "playerLost",
       ({ order, newPlaces }: { order: number[]; newPlaces: number[] }) => {
-        setPlaces(newPlaces);
-        setOrderForPlayers(order);
+        setPlaces(() => newPlaces);
+        setOrderForPlayers(() => order);
       }
     );
+
+    return () => {
+      setMostRecentMove(() => null);
+      socket.removeAllListeners("playerMoved");
+    };
   }, []);
 
   useEffect(() => {
@@ -125,13 +130,13 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
         places,
       }}
     >
-      <div className="onlineGame">
+      <div id="onlineGame">
         {onlinePlayers.players.includes(username) && !color ? (
           <ChooseColor />
         ) : null}
 
         <TurnOrder />
-        <RightContainer />
+        <GameContainer />
       </div>
     </OnlineGameContext.Provider>
   );

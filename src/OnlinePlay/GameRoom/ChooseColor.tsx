@@ -26,8 +26,8 @@ const ChooseColor = () => {
           onClick={() => {
             const color = (document.getElementById("color") as HTMLFormElement)
               .value;
-            setColor(color);
-            setShowModal(!showModal);
+            setColor(() => color);
+            setShowModal(() => !showModal);
             socket.emit("ready", { color, currentRoom, username });
           }}
         >

@@ -5,9 +5,7 @@ import { OnlinePlayContext } from "../../OnlinePlayContext";
 import { OnlineGameContext } from "../OnlineGameContext";
 
 const GameOutcomeModal = () => {
-  const { socket, username, onlinePlayers, currentRoom } = useContext(
-    OnlinePlayContext
-  );
+  const { onlinePlayers } = useContext(OnlinePlayContext);
   const { places } = useContext(OnlineGameContext);
   const [showModal, setShowModal] = useState(true);
 
@@ -37,12 +35,6 @@ const GameOutcomeModal = () => {
           <button
             style={{ marginLeft: "10px" }}
             onClick={() => {
-              socket.emit("joinRoom", {
-                username,
-                oldRoom: currentRoom,
-                newRoom: "lobby",
-                role: "watchers",
-              });
               navigate("../online");
               setShowModal(!showModal);
             }}

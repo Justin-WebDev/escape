@@ -37,10 +37,10 @@ const Dot: FunctionComponent<{
           for (const dot in newMoves) {
             newMoves[dot].filter((element) => element !== `${newX}${newY}`);
           }
-          setAvailableMoves(newMoves);
+          setAvailableMoves(() => newMoves);
         }
 
-        setCounter(counter + 1);
+        setCounter(() => counter + 1);
       }
     }
   }, [mostRecentMove]);
@@ -59,7 +59,7 @@ const Dot: FunctionComponent<{
       onClick={() => {
         if (onlinePlayers.players[orderForPlayers[0]] === username) {
           if (!currentPosition && counter < 3) {
-            setCurrentPosition([x, y]);
+            setCurrentPosition(() => [x, y]);
             addPlayerBorder(x, y, color);
           } else if (counter < 3) {
             const [oldX, oldY] = currentPosition;
@@ -71,7 +71,7 @@ const Dot: FunctionComponent<{
                 Math.abs(y - oldY) === 1 &&
                 availableMoves[`${oldX}${oldY}`].includes(`${x}${y}`))
             ) {
-              setCurrentPosition([x, y]);
+              setCurrentPosition(() => [x, y]);
               socket.emit("playerMoved", {
                 newX: x,
                 newY: y,
