@@ -4,11 +4,17 @@ export const removePlayerBorder = (x: number, y: number) => {
   const bordersOnOldDot = oldDot?.style.boxShadow;
 
   if (bordersOnOldDot) {
-    const re = /(?=(rgb))/;
-    let oldBordersArray: string[] = bordersOnOldDot.split(re);
+    let oldBordersArray: string[] = bordersOnOldDot.split(", rgb");
     oldBordersArray.shift();
-    oldBordersArray.filter((element) => element !== "rgb");
-    oldDot!.style.boxShadow = `${oldBordersArray.join(",")}`;
+    // oldBordersArray.filter((element) => element !== "rgb");
+    const newBorders = oldBordersArray.reduce((output, element, index) => {
+      if (index === 0) {
+        return `rgb${element}`;
+      }
+      return `${output}, rgb${element}`;
+    }, "");
+    // oldDot!.style.boxShadow = `${oldBordersArray.join(",")}`;
+    oldDot!.style.boxShadow = newBorders;
   }
 };
 

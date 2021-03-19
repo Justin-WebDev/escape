@@ -52,9 +52,7 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
         setIsGameReady(() => true);
       }
     );
-  }, []);
 
-  useEffect(() => {
     socket.on(
       "playerMoved",
       ({
@@ -94,6 +92,8 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
     return () => {
       setMostRecentMove(() => null);
       socket.removeAllListeners("playerMoved");
+      socket.removeAllListeners("playerLost");
+      socket.removeAllListeners("gameIsReady");
     };
   }, []);
 
