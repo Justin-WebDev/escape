@@ -5,13 +5,13 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { EscapeContext } from "../../../context";
 import { OnlinePlayContext } from "../../OnlinePlayContext";
 const Room: FunctionComponent<
   RouteComponentProps<{ roomName: string; index: number }>
 > = ({ roomName, index }) => {
-  const { rooms, currentRoom } = useContext(OnlinePlayContext);
-  const { socket, username } = useContext(EscapeContext);
+  const { socket, username, rooms, currentRoom } = useContext(
+    OnlinePlayContext
+  );
   const [isFull, setIsFull] = useState<boolean>(false);
 
   useEffect(() => {

@@ -1,10 +1,12 @@
 import React, { useContext } from "react";
-import { EscapeContext } from "../../../context";
+// import { EscapeContext } from "../../../context";
 import { OnlinePlayContext } from "../../OnlinePlayContext";
 
 const OnlinePlayers = () => {
-  const { username } = useContext(EscapeContext);
-  const { onlinePlayers, color, currentRoom } = useContext(OnlinePlayContext);
+  // const { username } = useContext(EscapeContext);
+  const { username, onlinePlayers, color, currentRoom } = useContext(
+    OnlinePlayContext
+  );
   return onlinePlayers ? (
     <div className="onlinePlayersContainer">
       <div

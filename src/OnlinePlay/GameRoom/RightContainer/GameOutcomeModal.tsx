@@ -1,28 +1,15 @@
 import { navigate } from "@reach/router";
-import React, { useContext, useEffect, useState } from "react";
-import { EscapeContext } from "../../../context";
+import React, { useContext, useState } from "react";
 import Modal from "../../../Modal";
 import { OnlinePlayContext } from "../../OnlinePlayContext";
 import { OnlineGameContext } from "../OnlineGameContext";
 
 const GameOutcomeModal = () => {
-  const { socket, username } = useContext(EscapeContext);
-  const { onlinePlayers, currentRoom } = useContext(OnlinePlayContext);
-  const {
-    places,
-    color,
-    setIsGameReady,
-    setCurrentPosition,
-    setMostRecentMove,
-  } = useContext(OnlineGameContext);
+  const { socket, username, onlinePlayers, currentRoom } = useContext(
+    OnlinePlayContext
+  );
+  const { places } = useContext(OnlineGameContext);
   const [showModal, setShowModal] = useState(true);
-
-  // useEffect(() => {
-  //   setIsGameReady(false);
-  //   setCurrentPosition([]);
-  //   setMostRecentMove(null);
-  //   socket.emit("gameEnded", currentRoom);
-  // }, []);
 
   return showModal ? (
     <Modal>
@@ -47,15 +34,6 @@ const GameOutcomeModal = () => {
             marginTop: "15px",
           }}
         >
-          {/* <button
-            style={{ marginRight: "10px" }}
-            onClick={() => {
-              socket.emit("ready", { color, currentRoom, username });
-              setShowModal(!showModal);
-            }}
-          >
-            Rematch
-          </button> */}
           <button
             style={{ marginLeft: "10px" }}
             onClick={() => {

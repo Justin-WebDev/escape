@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
-import { EscapeContext } from "../../../context";
 import { OnlinePlayContext } from "../../OnlinePlayContext";
 
 const WaitingForPlayers = () => {
-  const { onlinePlayers } = useContext(OnlinePlayContext);
-  const { socket } = useContext(EscapeContext);
+  const { socket, onlinePlayers } = useContext(OnlinePlayContext);
 
   socket.on(
     "choseColor",

@@ -1,22 +1,19 @@
-import { Redirect, RouteComponentProps, Router } from "@reach/router";
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { RouteComponentProps, Router } from "@reach/router";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import ChatRoom from "./ChatRoom";
 import { OnlinePlayContext } from "./OnlinePlayContext";
-import { EscapeContext } from "../context";
-
 import "./_onlinePlay.scss";
 import Lobby from "./Lobby";
 import OnlineGame from "./GameRoom";
+import Login from "./Login";
 
 const color = "blue";
 
 const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
-  const { socket, username } = useContext(EscapeContext);
+  const [username, setUsername] = useState<string | null>(null);
+  const [socket, setSocket] = useState<any>(null);
+
   const [currentRoom, setCurrentRoom] = useState<string | null>(null);
 
   const [rooms, setRooms] = useState<{
@@ -28,53 +25,53 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
       status: boolean;
     };
   }>({});
-  const [messages, setMessages] = useState<{ name: string; message: string }[]>(
-    []
-  );
+
   const [onlinePlayers, setOnlinePlayers] = useState<{
     players: string[];
     watchers: string[];
-  } | null>(null);
+  }>({ players: [], watchers: [] });
 
   useEffect(() => {
-    socket.on(
-      "updateLobby",
-      ({
-        allRooms,
-        usersInRoom,
-      }: {
-        allRooms: { [key: string]: any };
-        usersInRoom: { players: string[]; watchers: string[] };
-      }) => {
-        setRooms(allRooms);
-        setOnlinePlayers(usersInRoom);
-      }
-    );
-    socket.on("changeRoom", (room: string) => setCurrentRoom(room));
-
-    socket.on(
-      "updateRoom",
-      (usersInRoom: { players: string[]; watchers: string[] }) => {
-        setOnlinePlayers(usersInRoom);
-      }
-    );
+    if (!socket) {
+      setSocket(() => io());
+    }
   }, []);
 
   useEffect(() => {
-    socket.on(
-      "message",
-      ({ name, message }: { name: string; message: string }) => {
-        setMessages([...messages, { name, message }]);
-      }
-    );
-  });
+    if (socket) {
+      socket.on(
+        "updateLobby",
+        ({
+          allRooms,
+          usersInRoom,
+        }: {
+          allRooms: { [key: string]: any };
+          usersInRoom: { players: string[]; watchers: string[] };
+        }) => {
+          setRooms(() => allRooms);
+          setOnlinePlayers(() => usersInRoom);
+        }
+      );
+
+      socket.on("changeRoom", (room: string) => setCurrentRoom(() => room));
+
+      socket.on(
+        "updateRoom",
+        (usersInRoom: { players: string[]; watchers: string[] }) => {
+          setOnlinePlayers(() => usersInRoom);
+        }
+      );
+    }
+  }, [socket]);
 
   return (
     <OnlinePlayContext.Provider
       value={{
+        socket,
+        username,
+        setUsername,
         rooms,
         setRooms,
-        messages,
         onlinePlayers,
         color,
         currentRoom,
@@ -90,9 +87,7 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
           <ChatRoom />
         </div>
       ) : (
-        <div>
-          <Redirect to="../login" />
-        </div>
+        <Login path="/login" />
       )}
     </OnlinePlayContext.Provider>
   );

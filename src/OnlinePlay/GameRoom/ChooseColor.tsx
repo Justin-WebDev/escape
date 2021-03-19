@@ -1,13 +1,11 @@
 import React, { useContext, useState } from "react";
-import { EscapeContext } from "../../context";
 import Modal from "../../Modal";
 import { OnlinePlayContext } from "../OnlinePlayContext";
 import { OnlineGameContext } from "./OnlineGameContext";
 
 const ChooseColor = () => {
-  const { username, socket } = useContext(EscapeContext);
   const { setColor } = useContext(OnlineGameContext);
-  const { currentRoom } = useContext(OnlinePlayContext);
+  const { socket, username, currentRoom } = useContext(OnlinePlayContext);
   const [showModal, setShowModal] = useState(true);
 
   return showModal ? (

@@ -1,4 +1,4 @@
-import { navigate, RouteComponentProps } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import React, {
   FunctionComponent,
   useContext,
@@ -6,8 +6,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { EscapeContext } from "../../context";
 import Modal from "../../Modal";
+import { OnlinePlayContext } from "../OnlinePlayContext";
 
 /**
  * GOING TO MAKE JUST A TEXT INPUT FOR NOW
@@ -15,7 +15,7 @@ import Modal from "../../Modal";
  * REPLACE WITH LOGIN / SIGN UP AND MAYBE CONTINUE AS GUEST
  */
 const Login: FunctionComponent<RouteComponentProps> = () => {
-  const { socket, setUsername } = useContext(EscapeContext);
+  const { setUsername } = useContext(OnlinePlayContext);
   const [showModal, setShowModal] = useState(true);
   const inputEl = useRef<HTMLInputElement>(null);
 
@@ -40,14 +40,8 @@ const Login: FunctionComponent<RouteComponentProps> = () => {
                   "createUsername"
                 ) as HTMLFormElement).value;
 
-                setUsername(username);
-                setShowModal(!showModal);
-
-                socket.emit("joinRoom", {
-                  username,
-                  newRoom: "lobby",
-                });
-                navigate("/online");
+                setUsername(() => username);
+                setShowModal(() => !showModal);
               }
             }}
           />
@@ -58,14 +52,8 @@ const Login: FunctionComponent<RouteComponentProps> = () => {
                 "createUsername"
               ) as HTMLFormElement).value;
 
-              setUsername(username);
-              setShowModal(!showModal);
-
-              socket.emit("joinRoom", {
-                username,
-                newRoom: "lobby",
-              });
-              navigate("/online");
+              setUsername(() => username);
+              setShowModal(() => !showModal);
             }}
           >
             Submit

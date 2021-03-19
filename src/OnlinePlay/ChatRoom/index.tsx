@@ -1,12 +1,23 @@
-import React, { useContext } from "react";
-import { EscapeContext } from "../../context";
+import React, { useContext, useEffect, useState } from "react";
 import { OnlinePlayContext } from "../OnlinePlayContext";
 import OnlinePlayers from "./OnlinePlayers";
 import "./_chatRoom.scss";
 
 const ChatRoom = () => {
-  const { messages, color, currentRoom } = useContext(OnlinePlayContext);
-  const { socket, username } = useContext(EscapeContext);
+  const { socket, username, color, currentRoom } = useContext(
+    OnlinePlayContext
+  );
+
+  const [messages, setMessages] = useState<{ name: string; message: string }[]>(
+    []
+  );
+
+  socket.on(
+    "message",
+    ({ name, message }: { name: string; message: string }) => {
+      setMessages(() => [...messages, { name, message }]);
+    }
+  );
 
   return (
     <div className="chatRoomContainer">

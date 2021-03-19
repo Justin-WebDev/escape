@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { EscapeContext } from "../../../../../context";
 import { OnlinePlayContext } from "../../../../OnlinePlayContext";
 import { OnlineGameContext } from "../../../OnlineGameContext";
 import { addPlayerBorder } from "./utils/addPlayerBorder";
@@ -22,8 +21,9 @@ const Dot: FunctionComponent<{
     setAvailableMoves,
     color,
   } = useContext(OnlineGameContext);
-  const { currentRoom, onlinePlayers } = useContext(OnlinePlayContext);
-  const { username, socket } = useContext(EscapeContext);
+  const { socket, username, currentRoom, onlinePlayers } = useContext(
+    OnlinePlayContext
+  );
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {

@@ -4,9 +4,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { EscapeContext } from "../../context";
 import { OnlinePlayContext } from "../OnlinePlayContext";
-import LeftContainer from "./LeftContainer";
 import { OnlineGameContext } from "./OnlineGameContext";
 import RightContainer from "./RightContainer";
 import ChooseColor from "./ChooseColor";
@@ -18,8 +16,7 @@ import { drawLine } from "./RightContainer/Game/Board/utils/drawLine";
 import TurnOrder from "./LeftContainer/TurnOrder";
 
 const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
-  const { socket, username } = useContext(EscapeContext);
-  const { onlinePlayers } = useContext(OnlinePlayContext);
+  const { socket, username, onlinePlayers } = useContext(OnlinePlayContext);
   const [color, setColor] = useState<string | null>(null);
   const [boardSize, setBoardSize] = useState<number | null>(null);
   const [currentPosition, setCurrentPosition] = useState<number[] | null>(null);
@@ -94,15 +91,6 @@ const OnlineGame: FunctionComponent<RouteComponentProps> = () => {
       }
     );
   }, []);
-
-  // socket.on(
-  //   "gameEnded",
-  //   ({ isGameReady, isNull }: { isGameReady: boolean; isNull: null }) => {
-  //     setIsGameReady(isGameReady);
-  //     setCurrentPosition(isNull);
-  //     setMostRecentMove(isNull);
-  //   }
-  // );
 
   useEffect(() => {
     if (availableMoves && currentPosition && orderForPlayers.length > 0) {

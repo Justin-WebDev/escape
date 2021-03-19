@@ -8,15 +8,15 @@ import React, {
   useRef,
 } from "react";
 import { OnlinePlayContext } from "../OnlinePlayContext";
-import { EscapeContext } from "../../context";
 import Modal from "../../Modal";
 
 const CreateNewRoomModal: FunctionComponent<{
   setShowModal: Dispatch<SetStateAction<boolean>>;
   showModal: boolean;
 }> = ({ setShowModal, showModal }) => {
-  const { socket, username } = useContext(EscapeContext);
-  const { currentRoom, setCurrentRoom } = useContext(OnlinePlayContext);
+  const { socket, username, currentRoom, setCurrentRoom } = useContext(
+    OnlinePlayContext
+  );
   const inputEl = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
