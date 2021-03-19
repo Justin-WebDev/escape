@@ -63,9 +63,9 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
       );
     }
 
-    return () => {
-      socket.removeAllListeners("updateLobby");
-    };
+    // return () => {
+    //   socket.removeAllListeners("updateLobby");
+    // };
   }, [socket]);
 
   return (
