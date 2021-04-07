@@ -7,11 +7,12 @@ import "./_onlinePlay.scss";
 import Lobby from "./Lobby";
 import OnlineGame from "./GameRoom";
 import Login from "./Login";
+import Nav from "../Nav";
 
 const color = "blue";
 
 const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
-  const [username, setUsername] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>("Duck");
   const [socket, setSocket] = useState<any>(null);
 
   const [currentRoom, setCurrentRoom] = useState<string | null>(null);
@@ -83,12 +84,17 @@ const OnlinePlay: FunctionComponent<RouteComponentProps> = () => {
       }}
     >
       {username ? (
-        <div className="onlinePlayContainer">
-          <Router>
-            <Lobby path="/" />
-            <OnlineGame path=":id" />
-          </Router>
-          <ChatRoom />
+        <div className="w-full h-full">
+          <Nav />
+          {socket ? (
+            <>
+              <Router>
+                <Lobby path="/lobby" />
+                <OnlineGame path="/:id" />
+              </Router>
+              <ChatRoom />
+            </>
+          ) : null}
         </div>
       ) : (
         <Login path="/login" />

@@ -15,9 +15,9 @@ const Lobby: FunctionComponent<RouteComponentProps> = () => {
   }, []);
 
   return (
-    <div className="onlineGameAreaContainer">
-      <GameRooms />
-    </div>
+    // <div className="onlineGameAreaContainer">
+    <GameRooms />
+    // </div>
   );
 };
 
